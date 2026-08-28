@@ -1,0 +1,16 @@
+{
+  "name": "release-guard",
+  "private": true,
+  "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "build": "corepack pnpm -r build",
+    "typecheck": "corepack pnpm -r typecheck",
+    "start:api": "corepack pnpm --filter @release-guard/api start",
+    "start:worker": "corepack pnpm --filter @release-guard/worker start",
+    "start:demo": "corepack pnpm --filter @release-guard/demo-app start"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2"
+  }
+}
