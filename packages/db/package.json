@@ -14,10 +14,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@release-guard/contracts": "workspace:*"
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "@release-guard/contracts": "workspace:*",
+    "pg": "^8.23.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@types/pg": "^8.23.1",
+    "dotenv": "^17.4.2",
+    "prisma": "7.10.0",
     "typescript": "catalog:"
   }
 }
