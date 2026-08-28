@@ -1,1 +1,171 @@
-  
+generator client {
+  provider               = "prisma-client"
+  output                 = "../src/generated/prisma"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RunnerType {
+  PLAYWRIGHT_BROWSER
+}
+
+enum VerificationTriggerType {
+  MANUAL
+  MANUAL_RERUN
+  DEPLOYMENT
+}
+
+enum RunStatus {
+  QUEUED
+  RUNNING
+  PASSED
+  FAILED
+  INFRASTRUCTURE_ERROR
+  TIMED_OUT
+  CANCELLED
+}
+
+enum AttemptStatus {
+  PROVISIONING
+  RUNNING
+  PASSED
+  FAILED
+  INFRASTRUCTURE_ERROR
+  TIMED_OUT
+  CANCELLED
+}
+
+enum FailureType {
+  ASSERTION
+  APPLICATION_NETWORK
+  TARGET_UNAVAILABLE
+  BROWSER
+  RUNNER
+  SECRET_RESOLUTION
+  UNKNOWN
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  environments     Environment[]
+  checkDefinitions CheckDefinition[]
+  verificationRuns VerificationRun[]
+}
+
+model Environment {
+  id        String   @id @default(cuid())
+  projectId String
+  name      String
+  baseUrl   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project          Project           @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  verificationRuns VerificationRun[]
+
+  @@unique([projectId, name])
+  @@index([projectId])
+}
+
+model CheckDefinition {
+  id         String     @id @default(cuid())
+  projectId  String
+  name       String
+  runnerType RunnerType
+  isActive   Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  project  Project        @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  versions CheckVersion[]
+
+  @@unique([projectId, name])
+  @@index([projectId])
+}
+
+model CheckVersion {
+  id                String     @id @default(cuid())
+  checkDefinitionId String
+  versionNumber     Int
+  runnerType        RunnerType
+  schemaVersion     Int
+  configurationJson Json       @db.JsonB
+  createdAt         DateTime   @default(now())
+
+  checkDefinition CheckDefinition @relation(fields: [checkDefinitionId], references: [id], onDelete: Restrict)
+  checkRuns       CheckRun[]
+
+  @@unique([checkDefinitionId, versionNumber])
+  @@index([checkDefinitionId])
+}
+
+model VerificationRun {
+  id            String                  @id @default(cuid())
+  projectId     String
+  environmentId String
+  triggerType   VerificationTriggerType
+  status        RunStatus               @default(QUEUED)
+  correlationId String                  @unique
+  createdAt     DateTime                @default(now())
+  startedAt     DateTime?
+  completedAt   DateTime?
+  updatedAt     DateTime                @updatedAt
+
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  environment Environment @relation(fields: [environmentId], references: [id], onDelete: Restrict)
+  checkRuns   CheckRun[]
+
+  @@index([projectId])
+  @@index([environmentId])
+  @@index([status])
+}
+
+model CheckRun {
+  id                String    @id @default(cuid())
+  verificationRunId String
+  checkVersionId    String
+  status            RunStatus @default(QUEUED)
+  createdAt         DateTime  @default(now())
+  startedAt         DateTime?
+  completedAt       DateTime?
+  updatedAt         DateTime  @updatedAt
+
+  verificationRun VerificationRun @relation(fields: [verificationRunId], references: [id], onDelete: Restrict)
+  checkVersion    CheckVersion    @relation(fields: [checkVersionId], references: [id], onDelete: Restrict)
+  attempts        Attempt[]
+
+  @@unique([verificationRunId, checkVersionId])
+  @@index([verificationRunId])
+  @@index([checkVersionId])
+  @@index([status])
+}
+
+model Attempt {
+  id             String        @id @default(cuid())
+  checkRunId     String
+  attemptNumber  Int
+  status         AttemptStatus @default(PROVISIONING)
+  failureType    FailureType?
+  failureMessage String?
+  durationMs     Int?
+  createdAt      DateTime      @default(now())
+  startedAt      DateTime?
+  completedAt    DateTime?
+  updatedAt      DateTime      @updatedAt
+
+  checkRun CheckRun @relation(fields: [checkRunId], references: [id], onDelete: Restrict)
+
+  @@unique([checkRunId, attemptNumber])
+  @@index([checkRunId])
+  @@index([status])
+}
