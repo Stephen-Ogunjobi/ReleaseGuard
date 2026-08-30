@@ -5,6 +5,10 @@ export interface CommonEnvironment {
   databaseUrl: string;
 }
 
+export interface ApiEnvironment extends CommonEnvironment {
+  port: number;
+}
+
 export type DemoAppMode = "WORKING" | "BROKEN";
 
 export interface DemoAppEnvironment {
@@ -25,8 +29,12 @@ function readEnum<const T extends readonly string[]>(
   return value as T[number];
 }
 
-function readNonEmpty(name: string, fallback: string): string {
-  const value = process.env[name] ?? fallback;
+function readNonEmpty(
+  name: string,
+  fallback: string,
+  source: NodeJS.ProcessEnv = process.env,
+): string {
+  const value = source[name] ?? fallback;
   if (value.trim() === "") throw new Error(`${name} must not be empty`);
   return value;
 }
@@ -51,9 +59,34 @@ export function loadDemoAppEnvironment(source: NodeJS.ProcessEnv = process.env):
   };
 }
 
-export function loadCommonEnvironment(): CommonEnvironment {
+export function loadCommonEnvironment(source: NodeJS.ProcessEnv = process.env): CommonEnvironment {
   return {
-    nodeEnv: readEnum("NODE_ENV", ["development", "test", "production"] as const, "development"),
-    databaseUrl: readNonEmpty("DATABASE_URL", "memory://release-guard"),
+    nodeEnv: readEnum(
+      "NODE_ENV",
+      ["development", "test", "production"] as const,
+      "development",
+      source,
+    ),
+    databaseUrl: readNonEmpty("DATABASE_URL", "memory://release-guard", source),
+  };
+}
+
+export function loadApiEnvironment(source: NodeJS.ProcessEnv = process.env): ApiEnvironment {
+  const common = loadCommonEnvironment(source);
+  let databaseUrl: URL;
+
+  try {
+    databaseUrl = new URL(common.databaseUrl);
+  } catch {
+    throw new Error("DATABASE_URL must be a valid PostgreSQL connection URL");
+  }
+
+  if (databaseUrl.protocol !== "postgresql:" && databaseUrl.protocol !== "postgres:") {
+    throw new Error("DATABASE_URL must use the postgresql:// or postgres:// protocol");
+  }
+
+  return {
+    ...common,
+    port: readPositiveInteger("API_PORT", 3000, source),
   };
 }
