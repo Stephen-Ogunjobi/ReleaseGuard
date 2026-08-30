@@ -1,11 +1,23 @@
-import { loadCommonEnvironment } from "@release-guard/config";
-import type { HealthResponse } from "@release-guard/contracts";
+import { loadDemoAppEnvironment } from "@release-guard/config";
+import { createDemoServer } from "./server.ts";
 
-const environment = loadCommonEnvironment();
-const result: HealthResponse = {
-  status: "ok",
-  service: "demo-app",
-  timestamp: new Date().toISOString(),
-};
+const environment = loadDemoAppEnvironment();
+const server = createDemoServer({ mode: environment.mode });
 
-console.log(JSON.stringify({ environment: environment.nodeEnv, ...result }, null, 2));
+server.listen(environment.port, "0.0.0.0", () => {
+  console.log(
+    `demo app listening on http://localhost:${environment.port}/login in ${environment.mode} mode`,
+  );
+});
+
+function shutdown(): void {
+  server.close((error) => {
+    if (error) {
+      console.error(error);
+      process.exitCode = 1;
+    }
+  });
+}
+
+process.once("SIGINT", shutdown);
+process.once("SIGTERM", shutdown);
