@@ -10,8 +10,10 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit"
+    "generate": "prisma generate",
+    "build": "prisma generate && tsc -p tsconfig.build.json",
+    "test:integration": "prisma generate && node --experimental-strip-types --test --test-concurrency=1 test/**/*.test.ts",
+    "typecheck": "prisma generate && tsc --noEmit && tsc -p tsconfig.test.json"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
