@@ -2,8 +2,10 @@ import type { ReleaseRecord } from "@release-guard/contracts";
 
 export { createDatabaseClient, type DatabaseClient } from "./client.ts";
 export {
+  ActiveCheckDefinitionWithoutVersionError,
   DomainRecordNotFoundError,
   InvalidAttemptTransitionError,
+  NoActiveCheckDefinitionsError,
   TerminalAttemptError,
 } from "./errors.ts";
 export {
@@ -18,6 +20,11 @@ export {
   CheckVersionService,
   type CreateCheckVersionInput,
 } from "./services/check-version-service.ts";
+export {
+  VerificationRunService,
+  type CreateManualVerificationInput,
+  type ManualVerificationRun,
+} from "./services/verification-run-service.ts";
 
 export interface Database {
   listReleases(): Promise<readonly ReleaseRecord[]>;

@@ -18,3 +18,17 @@ export class TerminalAttemptError extends Error {
     this.name = "TerminalAttemptError";
   }
 }
+
+export class NoActiveCheckDefinitionsError extends Error {
+  constructor(projectId: string) {
+    super(`Project ${projectId} has no active check definitions`);
+    this.name = "NoActiveCheckDefinitionsError";
+  }
+}
+
+export class ActiveCheckDefinitionWithoutVersionError extends Error {
+  constructor(checkDefinitionId: string) {
+    super(`Active CheckDefinition ${checkDefinitionId} has no CheckVersion`);
+    this.name = "ActiveCheckDefinitionWithoutVersionError";
+  }
+}
