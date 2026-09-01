@@ -13,5 +13,8 @@ export function validateEnvironment(configuration: Record<string, unknown>) {
     NODE_ENV: validated.nodeEnv,
     DATABASE_URL: validated.databaseUrl,
     API_PORT: validated.port,
+    REDIS_HOST: validated.redis.host,
+    REDIS_PORT: validated.redis.port,
+    REDIS_PASSWORD: validated.redis.password,
   };
 }

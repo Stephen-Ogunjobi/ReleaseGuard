@@ -7,6 +7,13 @@ export interface CommonEnvironment {
 
 export interface ApiEnvironment extends CommonEnvironment {
   port: number;
+  redis: RedisEnvironment;
+}
+
+export interface RedisEnvironment {
+  host: string;
+  port: number;
+  password: string;
 }
 
 export type DemoAppMode = "WORKING" | "BROKEN";
@@ -36,6 +43,15 @@ function readNonEmpty(
 ): string {
   const value = source[name] ?? fallback;
   if (value.trim() === "") throw new Error(`${name} must not be empty`);
+  return value;
+}
+
+function readRequired(name: string, source: NodeJS.ProcessEnv = process.env): string {
+  const value = source[name];
+  if (value === undefined || value.trim() === "") {
+    throw new Error(`${name} is required and must not be empty`);
+  }
+
   return value;
 }
 
@@ -88,5 +104,10 @@ export function loadApiEnvironment(source: NodeJS.ProcessEnv = process.env): Api
   return {
     ...common,
     port: readPositiveInteger("API_PORT", 3000, source),
+    redis: {
+      host: readNonEmpty("REDIS_HOST", "127.0.0.1", source),
+      port: readPositiveInteger("REDIS_PORT", 6379, source),
+      password: readRequired("REDIS_PASSWORD", source),
+    },
   };
 }

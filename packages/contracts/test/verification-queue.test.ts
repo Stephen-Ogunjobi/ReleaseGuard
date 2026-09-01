@@ -21,7 +21,7 @@ test("creates the versioned identifier-only queue payload", () => {
 });
 
 test("creates a deterministic BullMQ job ID", () => {
-  assert.equal(verificationQueueJobId("check-run-id"), "check-run:check-run-id");
+  assert.equal(verificationQueueJobId("check-run-id"), "check-run-check-run-id");
 });
 
 test("rejects unsupported queue schema versions", () => {

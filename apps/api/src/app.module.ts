@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { AppController } from "./app.controller.ts";
 import { validateEnvironment } from "./config/environment.validation.ts";
 import { DatabaseModule } from "./database/database.module.ts";
+import { VerificationQueueModule } from "./queue/verification-queue.module.ts";
 
 const rootEnvironmentFile = fileURLToPath(new URL("../../../.env", import.meta.url));
 
@@ -16,6 +17,7 @@ const rootEnvironmentFile = fileURLToPath(new URL("../../../.env", import.meta.u
       validate: validateEnvironment,
     }),
     DatabaseModule,
+    VerificationQueueModule,
   ],
   controllers: [AppController],
 })

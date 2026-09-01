@@ -56,5 +56,5 @@ export function parseVerificationQueueJob(value: unknown): VerificationQueueJobV
 }
 
 export function verificationQueueJobId(checkRunId: string): string {
-  return `check-run:${readIdentifier(checkRunId, "checkRunId")}`;
+  return `check-run-${readIdentifier(checkRunId, "checkRunId")}`;
 }

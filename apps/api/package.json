@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@nestjs/bullmq": "^12.0.0",
     "@nestjs/common": "^12.0.1",
     "@nestjs/config": "^12.0.0",
     "@nestjs/core": "^12.0.1",
@@ -17,6 +18,8 @@
     "@release-guard/config": "workspace:*",
     "@release-guard/contracts": "workspace:*",
     "@release-guard/db": "workspace:*",
+    "bullmq": "^6.3.4",
+    "ioredis": "^6.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
   },
