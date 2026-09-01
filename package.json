@@ -5,6 +5,7 @@
   "scripts": {
     "build": "corepack pnpm -r build",
     "db:generate": "corepack pnpm --filter @release-guard/db generate",
+    "test:contracts": "corepack pnpm --filter @release-guard/contracts test",
     "test:integration": "corepack pnpm --filter @release-guard/db test:integration",
     "test:demo": "corepack pnpm --filter @release-guard/demo-app test",
     "typecheck": "corepack pnpm -r typecheck",
