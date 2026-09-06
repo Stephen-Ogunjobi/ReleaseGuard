@@ -15,6 +15,16 @@ export type {
   QueuedCheckRunResponse,
   QueuedVerificationResponse,
 } from "./manual-verification.ts";
+export type {
+  AttemptResultResponse,
+  AttemptResultStatus,
+  CheckResultResponse,
+  CheckRunResultResponse,
+  FailureClassification,
+  RunResultStatus,
+  SelectedCheckVersionResponse,
+  VerificationRunResultResponse,
+} from "./run-result.ts";
 
 export {
   createVerificationQueueJob,

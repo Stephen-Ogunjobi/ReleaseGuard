@@ -13,8 +13,30 @@ const manualVerificationInclude = {
   checkRuns: true,
 } satisfies Prisma.VerificationRunInclude;
 
+const verificationResultInclude = {
+  checkRuns: {
+    orderBy: { createdAt: "asc" },
+    include: {
+      checkVersion: {
+        include: {
+          checkDefinition: {
+            select: { id: true, name: true },
+          },
+        },
+      },
+      attempts: {
+        orderBy: { attemptNumber: "asc" },
+      },
+    },
+  },
+} satisfies Prisma.VerificationRunInclude;
+
 export type ManualVerificationRun = Prisma.VerificationRunGetPayload<{
   include: typeof manualVerificationInclude;
+}>;
+
+export type VerificationRunResult = Prisma.VerificationRunGetPayload<{
+  include: typeof verificationResultInclude;
 }>;
 
 export interface CreateManualVerificationInput {
@@ -28,6 +50,16 @@ export class VerificationRunService {
 
   constructor(database: DatabaseClient) {
     this.database = database;
+  }
+
+  async findResultById(runId: string): Promise<VerificationRunResult> {
+    const run = await this.database.verificationRun.findUnique({
+      where: { id: runId },
+      include: verificationResultInclude,
+    });
+
+    if (!run) throw new DomainRecordNotFoundError("VerificationRun", runId);
+    return run;
   }
 
   // establishes one authoritative operation for creating manual verification

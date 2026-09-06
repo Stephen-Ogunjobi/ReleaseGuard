@@ -5,7 +5,10 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from "@nestjs/common";
-import type { QueuedVerificationResponse } from "@release-guard/contracts";
+import type {
+  QueuedVerificationResponse,
+  VerificationRunResultResponse,
+} from "@release-guard/contracts";
 import {
   ActiveCheckDefinitionWithoutVersionError,
   DomainRecordNotFoundError,
@@ -15,6 +18,7 @@ import {
 import { randomUUID } from "node:crypto";
 import { DatabaseService } from "../database/database.service.ts";
 import { VerificationQueueProducer } from "../queue/verification-queue.producer.ts";
+import { mapVerificationRunResult } from "./run-result.mapper.ts";
 
 @Injectable()
 export class VerificationService {
@@ -26,6 +30,17 @@ export class VerificationService {
     private readonly queue: VerificationQueueProducer,
   ) {
     this.runs = new VerificationRunService(database.client);
+  }
+
+  async getResult(runId: string): Promise<VerificationRunResultResponse> {
+    try {
+      return mapVerificationRunResult(await this.runs.findResultById(runId));
+    } catch (error) {
+      if (error instanceof DomainRecordNotFoundError) {
+        throw new NotFoundException(error.message, { cause: error });
+      }
+      throw error;
+    }
   }
 
   async createManual(

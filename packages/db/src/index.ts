@@ -24,6 +24,7 @@ export {
   VerificationRunService,
   type CreateManualVerificationInput,
   type ManualVerificationRun,
+  type VerificationRunResult,
 } from "./services/verification-run-service.ts";
 
 export interface Database {
