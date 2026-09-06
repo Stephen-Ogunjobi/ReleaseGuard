@@ -10,6 +10,12 @@ export interface ReleaseRecord {
   createdAt: string;
 }
 
+export type {
+  CreateManualVerificationRequest,
+  QueuedCheckRunResponse,
+  QueuedVerificationResponse,
+} from "./manual-verification.ts";
+
 export {
   createVerificationQueueJob,
   parseVerificationQueueJob,
