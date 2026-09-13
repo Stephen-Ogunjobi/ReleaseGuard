@@ -52,7 +52,11 @@ export class VerificationService {
 
     try {
       // Resolving this call means the run and all CheckRuns are committed.
-      run = await this.runs.createManual({ projectId, environmentId, correlationId });
+      run = await this.runs.createManual({
+        projectId,
+        environmentId,
+        correlationId,
+      });
     } catch (error) {
       if (error instanceof DomainRecordNotFoundError) {
         throw new NotFoundException(error.message, { cause: error });
@@ -69,7 +73,10 @@ export class VerificationService {
     try {
       await Promise.all(
         run.checkRuns.map((checkRun) =>
-          this.queue.enqueue({ checkRunId: checkRun.id, correlationId: run.correlationId }),
+          this.queue.enqueue({
+            checkRunId: checkRun.id,
+            correlationId: run.correlationId,
+          }),
         ),
       );
     } catch (error) {

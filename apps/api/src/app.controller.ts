@@ -1,5 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
-import type { HealthResponse, ReleaseRecord } from "@release-guard/contracts";
+import type { HealthResponse } from "@release-guard/contracts";
 
 @Controller()
 export class AppController {
@@ -10,12 +10,5 @@ export class AppController {
       service: "api",
       timestamp: new Date().toISOString(),
     };
-  }
-
-  // This placeholder preserves the initial scaffold until release retrieval is
-  // replaced by the verification API in the next implementation steps.
-  @Get("releases")
-  releases(): readonly ReleaseRecord[] {
-    return [];
   }
 }

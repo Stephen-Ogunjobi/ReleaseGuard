@@ -16,8 +16,8 @@ Each application is an independent process and only consumes shared code from `p
 
 ```sh
 pnpm start:api       # HTTP API on http://localhost:3000
-pnpm start:worker    # background worker
-pnpm start:demo      # command-line demonstration
+pnpm start:worker    # worker bootstrap; BullMQ consumer is the next implementation step
+pnpm start:demo      # HTTP demo application on http://localhost:3100/login
 ```
 
 Environment variables are parsed and validated by `@release-guard/config` before each application starts. Supported values are documented in [.env.example](.env.example).

@@ -4,12 +4,6 @@ export interface HealthResponse {
   timestamp: string;
 }
 
-export interface ReleaseRecord {
-  id: string;
-  version: string;
-  createdAt: string;
-}
-
 export type {
   CreateManualVerificationRequest,
   QueuedCheckRunResponse,
