@@ -1,5 +1,6 @@
 export const VERIFICATION_QUEUE_NAME = "verification";
 export const VERIFICATION_QUEUE_JOB_NAME = "execute-check-run";
+export const VERIFICATION_QUEUE_PREFIX = "release-guard";
 export const VERIFICATION_QUEUE_SCHEMA_VERSION = 1 as const;
 
 export interface VerificationQueueJobV1 {

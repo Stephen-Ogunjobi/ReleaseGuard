@@ -16,6 +16,12 @@ export interface RedisEnvironment {
   password: string;
 }
 
+export interface WorkerEnvironment extends CommonEnvironment {
+  redis: RedisEnvironment;
+  concurrency: number;
+  attemptTimeoutMs: number;
+}
+
 export type DemoAppMode = "WORKING" | "BROKEN";
 
 export interface DemoAppEnvironment {
@@ -46,10 +52,37 @@ function readNonEmpty(
   return value;
 }
 
-function readRequired(name: string, source: NodeJS.ProcessEnv = process.env): string {
+function readRequired(
+  name: string,
+  source: NodeJS.ProcessEnv = process.env,
+): string {
   const value = source[name];
   if (value === undefined || value.trim() === "") {
     throw new Error(`${name} is required and must not be empty`);
+  }
+
+  return value;
+}
+
+function readPostgresDatabaseUrl(
+  source: NodeJS.ProcessEnv = process.env,
+): string {
+  const value = readRequired("DATABASE_URL", source);
+  let databaseUrl: URL;
+
+  try {
+    databaseUrl = new URL(value);
+  } catch {
+    throw new Error("DATABASE_URL must be a valid PostgreSQL connection URL");
+  }
+
+  if (
+    databaseUrl.protocol !== "postgresql:" &&
+    databaseUrl.protocol !== "postgres:"
+  ) {
+    throw new Error(
+      "DATABASE_URL must use the postgresql:// or postgres:// protocol",
+    );
   }
 
   return value;
@@ -68,14 +101,33 @@ export function readPositiveInteger(
   return value;
 }
 
-export function loadDemoAppEnvironment(source: NodeJS.ProcessEnv = process.env): DemoAppEnvironment {
+function loadRedisEnvironment(
+  source: NodeJS.ProcessEnv = process.env,
+): RedisEnvironment {
   return {
-    mode: readEnum("DEMO_APP_MODE", ["WORKING", "BROKEN"] as const, "WORKING", source),
+    host: readNonEmpty("REDIS_HOST", "127.0.0.1", source),
+    port: readPositiveInteger("REDIS_PORT", 6379, source),
+    password: readRequired("REDIS_PASSWORD", source),
+  };
+}
+
+export function loadDemoAppEnvironment(
+  source: NodeJS.ProcessEnv = process.env,
+): DemoAppEnvironment {
+  return {
+    mode: readEnum(
+      "DEMO_APP_MODE",
+      ["WORKING", "BROKEN"] as const,
+      "WORKING",
+      source,
+    ),
     port: readPositiveInteger("DEMO_APP_PORT", 3100, source),
   };
 }
 
-export function loadCommonEnvironment(source: NodeJS.ProcessEnv = process.env): CommonEnvironment {
+export function loadCommonEnvironment(
+  source: NodeJS.ProcessEnv = process.env,
+): CommonEnvironment {
   return {
     nodeEnv: readEnum(
       "NODE_ENV",
@@ -83,31 +135,33 @@ export function loadCommonEnvironment(source: NodeJS.ProcessEnv = process.env): 
       "development",
       source,
     ),
-    databaseUrl: readNonEmpty("DATABASE_URL", "memory://release-guard", source),
+    databaseUrl: readPostgresDatabaseUrl(source),
   };
 }
 
-export function loadApiEnvironment(source: NodeJS.ProcessEnv = process.env): ApiEnvironment {
+export function loadApiEnvironment(
+  source: NodeJS.ProcessEnv = process.env,
+): ApiEnvironment {
   const common = loadCommonEnvironment(source);
-  let databaseUrl: URL;
-
-  try {
-    databaseUrl = new URL(common.databaseUrl);
-  } catch {
-    throw new Error("DATABASE_URL must be a valid PostgreSQL connection URL");
-  }
-
-  if (databaseUrl.protocol !== "postgresql:" && databaseUrl.protocol !== "postgres:") {
-    throw new Error("DATABASE_URL must use the postgresql:// or postgres:// protocol");
-  }
 
   return {
     ...common,
     port: readPositiveInteger("API_PORT", 3000, source),
-    redis: {
-      host: readNonEmpty("REDIS_HOST", "127.0.0.1", source),
-      port: readPositiveInteger("REDIS_PORT", 6379, source),
-      password: readRequired("REDIS_PASSWORD", source),
-    },
+    redis: loadRedisEnvironment(source),
+  };
+}
+
+export function loadWorkerEnvironment(
+  source: NodeJS.ProcessEnv = process.env,
+): WorkerEnvironment {
+  return {
+    ...loadCommonEnvironment(source),
+    redis: loadRedisEnvironment(source),
+    concurrency: readPositiveInteger("WORKER_CONCURRENCY", 1, source),
+    attemptTimeoutMs: readPositiveInteger(
+      "ATTEMPT_TIMEOUT_MS",
+      120_000,
+      source,
+    ),
   };
 }

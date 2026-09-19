@@ -26,6 +26,7 @@ export {
   verificationQueueJobId,
   VERIFICATION_QUEUE_JOB_NAME,
   VERIFICATION_QUEUE_NAME,
+  VERIFICATION_QUEUE_PREFIX,
   VERIFICATION_QUEUE_SCHEMA_VERSION,
   type CreateVerificationQueueJobInput,
   type VerificationQueueJobV1,

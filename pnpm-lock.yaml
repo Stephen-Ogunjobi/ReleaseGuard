@@ -100,9 +100,21 @@ importers:
       '@release-guard/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@release-guard/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@release-guard/db':
         specifier: workspace:*
         version: link:../../packages/db
+      bullmq:
+        specifier: ^6.3.4
+        version: 6.3.4(ioredis@6.0.0)(pg@8.23.0)
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
+      ioredis:
+        specifier: ^6.0.0
+        version: 6.0.0
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
