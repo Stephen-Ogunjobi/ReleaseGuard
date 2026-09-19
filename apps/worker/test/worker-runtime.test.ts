@@ -4,7 +4,7 @@ import { test } from "node:test";
 import {
   registerShutdownSignals,
   type ShutdownSignalSource,
-} from "../src/worker-runtime.ts";
+} from "../src/bootstrap/worker-runtime.ts";
 
 for (const signal of ["SIGINT", "SIGTERM"] as const) {
   test(`${signal} closes worker resources`, async () => {

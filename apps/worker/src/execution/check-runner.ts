@@ -30,7 +30,7 @@ export interface RunnerExecutionResult {
   failureMessage?: string | null;
 }
 
-// The execution service depends on this boundary, not on Playwright. A concrete
+// The execution service depends on this boundary rather than Playwright. A concrete
 // browser runner can be added without moving persistence rules into runner code.
 export interface CheckRunner {
   execute(context: TrustedExecutionContext): Promise<RunnerExecutionResult>;

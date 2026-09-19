@@ -11,7 +11,7 @@ import { Worker } from "bullmq";
 import {
   createVerificationJobProcessor,
   type VerificationJobHandler,
-} from "./verification-job.processor.ts";
+} from "../queue/verification-job.processor.ts";
 
 export interface WorkerRuntime {
   database: DatabaseClient;

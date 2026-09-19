@@ -10,13 +10,13 @@ import {
   createDatabaseClient,
   type DatabaseClient,
 } from "@release-guard/db";
-import { CheckRunExecutionService } from "../../src/check-run-execution.service.ts";
-import { CheckRunCorrelationMismatchError } from "../../src/check-run-execution.errors.ts";
+import { CheckRunExecutionService } from "../../src/execution/check-run-execution.service.ts";
+import { CheckRunCorrelationMismatchError } from "../../src/execution/check-run-execution.errors.ts";
 import type {
   CheckRunner,
   RunnerExecutionResult,
   TrustedExecutionContext,
-} from "../../src/check-runner.ts";
+} from "../../src/execution/check-runner.ts";
 import { prepareWorkerTestDatabase } from "./test-database.ts";
 
 let database: DatabaseClient;

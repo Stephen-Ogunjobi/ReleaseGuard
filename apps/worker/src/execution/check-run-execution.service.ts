@@ -58,7 +58,9 @@ interface ClaimedCheckRun {
   context: TrustedExecutionContext;
 }
 
-type ClaimResult = ClaimedCheckRun | Extract<ExecuteCheckRunResult, { outcome: "IGNORED" }>;
+type ClaimResult =
+  | ClaimedCheckRun
+  | Extract<ExecuteCheckRunResult, { outcome: "IGNORED" }>;
 
 function aggregateTerminalStatus(
   statuses: readonly RunStatusValue[],

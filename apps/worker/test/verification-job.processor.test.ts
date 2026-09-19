@@ -4,7 +4,7 @@ import {
   createVerificationJobProcessor,
   UnknownVerificationJobNameError,
   type VerificationJobHandler,
-} from "../src/verification-job.processor.ts";
+} from "../src/queue/verification-job.processor.ts";
 
 test("valid jobs are parsed before domain work receives them", async () => {
   const received: unknown[] = [];

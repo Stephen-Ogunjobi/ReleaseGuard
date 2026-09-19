@@ -1,11 +1,11 @@
 import { loadWorkerEnvironment } from "@release-guard/config";
 import { config } from "dotenv";
 import { fileURLToPath } from "node:url";
-import { handleVerificationJob } from "./verification-job.handler.ts";
+import { handleVerificationJob } from "./queue/verification-job.handler.ts";
 import {
   createWorkerRuntime,
   registerShutdownSignals,
-} from "./worker-runtime.ts";
+} from "./bootstrap/worker-runtime.ts";
 
 const rootEnvironmentFile = fileURLToPath(
   new URL("../../../.env", import.meta.url),

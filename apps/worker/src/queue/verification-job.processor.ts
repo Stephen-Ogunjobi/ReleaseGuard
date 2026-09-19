@@ -34,7 +34,7 @@ export function createVerificationJobProcessor(
       throw new UnknownVerificationJobNameError(job.name);
     }
 
-    // Redis is an external boundary, so compile-time types are not trusted here.
+    // Redis is an external boundary; compile-time types are not trusted here.
     const payload = parseVerificationQueueJob(job.data);
     await handler(payload, { attemptTimeoutMs });
   };
