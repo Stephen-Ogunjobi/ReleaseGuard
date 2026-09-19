@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node --experimental-strip-types src/index.ts",
     "build": "tsc -p tsconfig.build.json",
-    "test": "node --experimental-strip-types --test test/**/*.test.ts",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "test:integration": "node --experimental-strip-types --test --test-concurrency=1 test/integration/**/*.test.ts",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json"
   },
   "dependencies": {
@@ -19,6 +20,8 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@types/pg": "^8.23.1",
+    "pg": "^8.23.0",
     "typescript": "catalog:"
   }
 }

@@ -16,7 +16,7 @@ Each application is an independent process and only consumes shared code from `p
 
 ```sh
 pnpm start:api       # HTTP API on http://localhost:3000
-pnpm start:worker    # worker bootstrap; BullMQ consumer is the next implementation step
+pnpm start:worker    # BullMQ verification worker
 pnpm start:demo      # HTTP demo application on http://localhost:3100/login
 ```
 

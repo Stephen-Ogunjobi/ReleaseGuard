@@ -8,7 +8,7 @@
     "test:api": "corepack pnpm --filter @release-guard/api test",
     "test:config": "corepack pnpm --filter @release-guard/config test",
     "test:contracts": "corepack pnpm --filter @release-guard/contracts test",
-    "test:integration": "corepack pnpm --filter @release-guard/db test:integration",
+    "test:integration": "corepack pnpm --filter @release-guard/db test:integration && corepack pnpm --filter @release-guard/worker test:integration",
     "test:demo": "corepack pnpm --filter @release-guard/demo-app test",
     "test:worker": "corepack pnpm --filter @release-guard/worker test",
     "typecheck": "corepack pnpm -r typecheck",

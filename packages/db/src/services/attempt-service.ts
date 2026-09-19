@@ -40,12 +40,14 @@ export interface TransitionAttemptInput {
   occurredAt?: Date;
 }
 
+export type AttemptPersistenceClient = Pick<DatabaseClient, "attempt">;
+
 // Centralizes worker-owned Attempt transitions so API and worker code cannot
 // accidentally rewrite terminal execution history through application services.
 export class AttemptService {
-  private readonly database: DatabaseClient;
+  private readonly database: AttemptPersistenceClient;
 
-  constructor(database: DatabaseClient) {
+  constructor(database: AttemptPersistenceClient) {
     this.database = database;
   }
 

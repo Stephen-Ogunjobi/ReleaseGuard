@@ -13,7 +13,11 @@ export {
   RunStatus,
   VerificationTriggerType,
 } from "./generated/prisma/enums.ts";
-export { AttemptService, type TransitionAttemptInput } from "./services/attempt-service.ts";
+export {
+  AttemptService,
+  type AttemptPersistenceClient,
+  type TransitionAttemptInput,
+} from "./services/attempt-service.ts";
 export {
   CheckVersionService,
   type CreateCheckVersionInput,

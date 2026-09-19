@@ -8,8 +8,8 @@ export const handleVerificationJob: VerificationJobHandler = async (
   payload: VerificationQueueJobV1,
   _context: VerificationJobContext,
 ) => {
-  // Failing explicitly prevents valid work from being falsely acknowledged before
-  // the verification domain processor is implemented in the next task.
+  // Failing explicitly prevents a job from being claimed until a concrete runner
+  // is wired to CheckRunExecutionService in the runner implementation task.
   throw new Error(
     `Verification execution is not implemented for CheckRun ${payload.checkRunId}`,
   );
