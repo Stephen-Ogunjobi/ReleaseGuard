@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node --experimental-strip-types src/index.ts",
     "build": "tsc -p tsconfig.build.json",
+    "browser:install": "playwright install chromium",
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "test:integration": "node --experimental-strip-types --test --test-concurrency=1 test/integration/**/*.test.ts",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json"
@@ -16,7 +17,8 @@
     "@release-guard/db": "workspace:*",
     "bullmq": "^6.3.4",
     "dotenv": "^17.4.2",
-    "ioredis": "^6.0.0"
+    "ioredis": "^6.0.0",
+    "playwright": "^1.65.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",

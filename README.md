@@ -7,6 +7,7 @@ Node.js/TypeScript monorepo managed with pnpm. It intentionally contains no web 
 ```sh
 corepack enable
 pnpm install
+pnpm --filter @release-guard/worker browser:install
 pnpm typecheck
 ```
 

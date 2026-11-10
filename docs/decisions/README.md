@@ -17,6 +17,7 @@ An accepted decision is not permanent. If the context changes, add a new record 
 | [0004](./0004-centralize-execution-state-transitions.md) | Centralize atomic execution rules in services backed by PostgreSQL | Accepted |
 | [0005](./0005-separate-worker-lifecycle-from-domain-execution.md) | Separate worker lifecycle, queue validation, and execution logic | Accepted |
 | [0006](./0006-versioned-playwright-configuration-contract.md) | Validate versioned Playwright configuration at runtime with Zod | Accepted |
+| [0007](./0007-reuse-browser-with-isolated-attempt-contexts.md) | Reuse one browser process with an isolated context per attempt | Accepted |
 
 ## What to record next
 
