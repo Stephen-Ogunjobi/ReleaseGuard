@@ -4,6 +4,15 @@ export interface HealthResponse {
   timestamp: string;
 }
 
+export {
+  InvalidPlaywrightCheckConfigurationError,
+  parsePlaywrightCheckConfiguration,
+  PLAYWRIGHT_CHECK_SCHEMA_VERSION,
+  UnsupportedPlaywrightCheckSchemaVersionError,
+  type PlaywrightCheckConfiguration,
+  type PlaywrightLoginCheckV1,
+} from "./check-config/index.ts";
+
 export type {
   CreateManualVerificationRequest,
   QueuedCheckRunResponse,

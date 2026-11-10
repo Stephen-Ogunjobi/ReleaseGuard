@@ -21,3 +21,7 @@ pnpm start:demo      # HTTP demo application on http://localhost:3100/login
 ```
 
 Environment variables are parsed and validated by `@release-guard/config` before each application starts. Supported values are documented in [.env.example](.env.example).
+
+## Architecture decisions
+
+The reasoning, alternatives, and tradeoffs behind major technical choices are recorded in [docs/decisions](docs/decisions/README.md). These records are also the source material for the project case study.
